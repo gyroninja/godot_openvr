@@ -4,13 +4,13 @@
 #ifndef OPENVR_OVERLAY_H
 #define OPENVR_OVERLAY_H
 
-#include "godot_openvr.h"
-#include <ProjectSettings.hpp>
-#include <Viewport.hpp>
+#include "openvr_data.h"
+#include <godot_cpp/classes/project_settings.hpp>
+#include <godot_cpp/classes/viewport.hpp>
 
 namespace godot {
 class OpenVROverlay : public Viewport {
-	GODOT_CLASS(OpenVROverlay, Viewport)
+	GDCLASS(OpenVROverlay, Viewport)
 
 private:
 	openvr_data *ovr;
@@ -20,13 +20,13 @@ private:
 	real_t overlay_width_in_meters;
 	bool overlay_visible;
 
-public:
-	static void _register_methods();
+protected:
+	static void _bind_methods();
 
+public:
 	OpenVROverlay();
 	~OpenVROverlay();
 
-	void _init();
 	void _ready();
 	void _exit_tree();
 

@@ -1,5 +1,7 @@
 extends XROrigin3D
 
+class_name OVRMain3D
+
 # Add this script to your XROrigin3D node and it will initialise OpenVR for you automatically.
 
 # Our plugin will now use the first actions.json found in the following locations
@@ -26,12 +28,10 @@ func get_openvr_config():
 
 func _ready():
 	# Load our config before we initialise
-	openvr_config = preload("res://addons/godot-openvr/OpenVRConfig.gdns");
-	if openvr_config:
-		print("Setup configuration")
-		openvr_config = openvr_config.new()
+	print("Setup configuration")
+	openvr_config = OpenVRConfig.new()
 		
-		openvr_config.default_action_set = default_action_set
+	openvr_config.default_action_set = default_action_set
 
 	# Find the interface and initialise
 	arvr_interface = XRServer.find_interface("OpenVR")

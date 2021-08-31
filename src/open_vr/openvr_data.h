@@ -6,23 +6,21 @@
 
 #include <openvr.h>
 
-#include <ArrayMesh.hpp>
-#include <Directory.hpp>
-#include <Godot.hpp>
-#include <Image.hpp>
-#include <ImageTexture.hpp>
-#include <OS.hpp>
-#include <ProjectSettings.hpp>
-#include <Quaternion.hpp>
-#include <Rect2.hpp>
-#include <Ref.hpp>
-#include <StandardMaterial3D.hpp>
-#include <String.hpp>
-#include <Transform3D.hpp>
-#include <Vector2.hpp>
-#include <Vector3.hpp>
+#include <godot_cpp/godot.hpp>
+#include <godot_cpp/classes/array_mesh.hpp>
+#include <godot_cpp/classes/directory.hpp>
+#include <godot_cpp/classes/image.hpp>
+#include <godot_cpp/classes/image_texture.hpp>
+#include <godot_cpp/classes/os.hpp>
+#include <godot_cpp/classes/project_settings.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/classes/standard_material3D.hpp>
+#include <godot_cpp/classes/xr_positional_tracker.hpp>
+#include <godot_cpp/classes/xr_server.hpp>
 
 #include <vector>
+
+namespace godot {
 
 class openvr_data {
 public:
@@ -104,7 +102,7 @@ private:
 
 	// tracked devices
 	struct tracked_device {
-		godot_int tracker_id;
+		Ref<XRPositionalTracker> tracker;
 		uint64_t last_rumble_update;
 
 		/* add our controller source */
@@ -213,10 +211,11 @@ public:
 	void remove_mesh(godot::ArrayMesh *p_mesh);
 
 	// helper functions
-	godot::Transform3D transform_from_matrix(vr::HmdMatrix34_t *p_matrix, godot_float p_world_scale);
-	void transform_from_matrix(godot_transform3d *p_dest, vr::HmdMatrix34_t *p_matrix, godot_float p_world_scale);
-	void matrix_from_transform(vr::HmdMatrix34_t *p_matrix, godot_transform3d *p_transform, godot_float p_world_scale);
-	void transform_from_bone(godot::Transform3D &p_transform, const vr::VRBoneTransform_t *p_bone_transform);
+	Transform3D transform_from_matrix(vr::HmdMatrix34_t *p_matrix, double p_world_scale);
+	void matrix_from_transform(vr::HmdMatrix34_t *p_matrix, Transform3D *p_transform, double p_world_scale);
+	void transform_from_bone(Transform3D &p_transform, const vr::VRBoneTransform_t *p_bone_transform);
 };
+
+} // namespace godot
 
 #endif /* !OPENVR_DATA_H */

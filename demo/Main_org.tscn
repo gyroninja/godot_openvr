@@ -11,13 +11,10 @@
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_render_model.tscn" type="PackedScene" id=9]
 [ext_resource path="res://addons/godot-xr-tools/objects/Viewport_2D_in_3D.tscn" type="PackedScene" id=10]
 [ext_resource path="res://player/ButtonStates.tscn" type="PackedScene" id=11]
-[ext_resource path="res://addons/godot-openvr/OpenVRController.gdns" type="Script" id=12]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_main.gd" type="Script" id=13]
-[ext_resource path="res://addons/godot-openvr/OpenVRPose.gdns" type="Script" id=14]
 [ext_resource path="res://misc/SmallCube.tscn" type="PackedScene" id=15]
 [ext_resource path="res://player/HandInteraction.tscn" type="PackedScene" id=16]
 [ext_resource path="res://addons/godot-xr-tools/functions/Function_Pickup.tscn" type="PackedScene" id=17]
-[ext_resource path="res://addons/godot-openvr/OpenVRAction.gdns" type="Script" id=18]
 [ext_resource path="res://player/Guardian.tscn" type="PackedScene" id=19]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_left_hand.tscn" type="PackedScene" id=20]
 [ext_resource path="res://addons/godot-openvr/scenes/ovr_right_hand.tscn" type="PackedScene" id=21]
@@ -65,10 +62,9 @@ camera = NodePath("../../ARVRCamera")
 collision_layer = 0
 collision_mask = 4
 
-[node name="Right_Hand" type="ARVRController" parent="Player"]
+[node name="Right_Hand" type="OpenVRController" parent="Player"]
 transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.25, 0 )
 controller_id = 2
-script = ExtResource( 12 )
 button_actions = PoolStringArray( "/actions/godot/in/custom_boolean" )
 
 [node name="OVRRenderModel" parent="Player/Right_Hand" instance=ExtResource( 9 )]
@@ -90,16 +86,14 @@ collision_layer = 0
 collision_layer = 0
 collision_mask = 4
 
-[node name="Left_Hand_Pose" type="Spatial" parent="Player"]
-script = ExtResource( 14 )
+[node name="Left_Hand_Pose" type="OpenVRPose" parent="Player"]
 action = "/actions/godot/in/custom_pose"
 on_hand = 1
 
 [node name="Hand_Interaction" parent="Player/Left_Hand_Pose" instance=ExtResource( 16 )]
 on_hand = 1
 
-[node name="Right_Hand_Pose" type="Spatial" parent="Player"]
-script = ExtResource( 14 )
+[node name="Right_Hand_Pose" type="OpenVRPose" parent="Player"]
 action = "/actions/godot/in/custom_pose"
 on_hand = 2
 
@@ -110,8 +104,7 @@ on_hand = 2
 visible = false
 mesh = SubResource( 1 )
 
-[node name="Toggle" type="Spatial" parent="Player/Guardian"]
-script = ExtResource( 18 )
+[node name="Toggle" type="OpenVRAction" parent="Player/Guardian"]
 pressed_action = "/actions/godot/in/toggle_guardian"
 
 [node name="ovr_left_hand" parent="Player" instance=ExtResource( 20 )]

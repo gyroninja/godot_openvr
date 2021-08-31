@@ -5,25 +5,24 @@
 #define OPENVR_CONFIG_H
 
 #include "openvr_data.h"
-#include <PackedVector3Array.hpp>
-#include <RefCounted.hpp>
-#include <String.hpp>
-#include <Transform3D.hpp>
-#include <XRServer.hpp>
+#include <godot_cpp/variant/packed_vector3_array.hpp>
+#include <godot_cpp/classes/ref_counted.hpp>
+#include <godot_cpp/variant/string.hpp>
+#include <godot_cpp/variant/transform3d.hpp>
+#include <godot_cpp/classes/xr_server.hpp>
 
 namespace godot {
 class OpenVRConfig : public RefCounted {
-	GODOT_CLASS(OpenVRConfig, RefCounted)
+	GDCLASS(OpenVRConfig, RefCounted)
 
 private:
 	openvr_data *ovr;
 	XRServer *server;
 
+protected:
+	static void _bind_methods();
+
 public:
-	static void _register_methods();
-
-	void _init();
-
 	OpenVRConfig();
 	~OpenVRConfig();
 

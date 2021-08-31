@@ -2,37 +2,35 @@
 // GDNative module that exposes some OpenVR module options to Godot
 
 #include "OpenVRConfig.h"
-#include "Utilities.hpp"
+
+#include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
-void OpenVRConfig::_register_methods() {
-	register_method("get_application_type", &OpenVRConfig::get_application_type);
-	register_method("set_application_type", &OpenVRConfig::set_application_type);
-	register_property<OpenVRConfig, int>("application_type", &OpenVRConfig::set_application_type, &OpenVRConfig::get_application_type, 0);
+void OpenVRConfig::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_application_type"), &OpenVRConfig::get_application_type);
+	ClassDB::bind_method(D_METHOD("set_application_type", "application_type"), &OpenVRConfig::set_application_type);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "application_type", PROPERTY_HINT_ENUM, "Other,Scene,Overlay"), "set_application_type", "get_application_type");
 
-	register_method("get_tracking_universe", &OpenVRConfig::get_tracking_universe);
-	register_method("set_tracking_universe", &OpenVRConfig::set_tracking_universe);
-	register_property<OpenVRConfig, int>("tracking_universe", &OpenVRConfig::set_tracking_universe, &OpenVRConfig::get_tracking_universe, 0);
+	ClassDB::bind_method(D_METHOD("get_tracking_universe"), &OpenVRConfig::get_tracking_universe);
+	ClassDB::bind_method(D_METHOD("set_tracking_universe", "tracking_universe"), &OpenVRConfig::set_tracking_universe);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "tracking_universe", PROPERTY_HINT_ENUM, "Seated,Standing,Raw"), "set_tracking_universe", "get_tracking_universe");
 
-	register_method("get_default_action_set", &OpenVRConfig::get_default_action_set);
-	register_method("set_default_action_set", &OpenVRConfig::set_default_action_set);
-	register_property<OpenVRConfig, String>("default_action_set", &OpenVRConfig::set_default_action_set, &OpenVRConfig::get_default_action_set, String());
+	ClassDB::bind_method(D_METHOD("get_default_action_set"), &OpenVRConfig::get_default_action_set);
+	ClassDB::bind_method(D_METHOD("set_default_action_set"), &OpenVRConfig::set_default_action_set);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "default_action_set"), "set_default_action_set", "get_default_action_set");
 
-	register_method("register_action_set", &OpenVRConfig::register_action_set);
-	register_method("set_active_action_set", &OpenVRConfig::set_active_action_set);
-	register_method("toggle_action_set_active", &OpenVRConfig::toggle_action_set_active);
-	register_method("is_action_set_active", &OpenVRConfig::is_action_set_active);
+	ClassDB::bind_method(D_METHOD("register_action_set"), &OpenVRConfig::register_action_set);
+	ClassDB::bind_method(D_METHOD("set_active_action_set"), &OpenVRConfig::set_active_action_set);
+	ClassDB::bind_method(D_METHOD("toggle_action_set_active"), &OpenVRConfig::toggle_action_set_active);
+	ClassDB::bind_method(D_METHOD("is_action_set_active"), &OpenVRConfig::is_action_set_active);
 
-	register_method("play_area_available", &OpenVRConfig::play_area_available);
-	register_method("get_play_area", &OpenVRConfig::get_play_area);
+	ClassDB::bind_method(D_METHOD("play_area_available"), &OpenVRConfig::play_area_available);
+	ClassDB::bind_method(D_METHOD("get_play_area"), &OpenVRConfig::get_play_area);
 
-	register_method("get_device_battery_percentage", &OpenVRConfig::get_device_battery_percentage);
-	register_method("is_device_charging", &OpenVRConfig::is_device_charging);
-}
-
-void OpenVRConfig::_init() {
-	// nothing to do here
+	ClassDB::bind_method(D_METHOD("get_device_battery_percentage"), &OpenVRConfig::get_device_battery_percentage);
+	ClassDB::bind_method(D_METHOD("is_device_charging"), &OpenVRConfig::is_device_charging);
 }
 
 OpenVRConfig::OpenVRConfig() {
@@ -41,9 +39,9 @@ OpenVRConfig::OpenVRConfig() {
 }
 
 OpenVRConfig::~OpenVRConfig() {
-	if (ovr != NULL) {
+	if (ovr != nullptr) {
 		ovr->release();
-		ovr = NULL;
+		ovr = nullptr;
 	}
 }
 
@@ -94,13 +92,13 @@ bool OpenVRConfig::play_area_available() const {
 PackedVector3Array OpenVRConfig::get_play_area() const {
 	const Vector3 *play_area = ovr->get_play_area();
 	Transform3D reference = server->get_reference_frame();
-	float ws = server->get_world_scale();
+	double ws = server->get_world_scale();
 
 	PackedVector3Array arr;
 	arr.resize(4);
 
 	for (int i = 0; i < 4; i++) {
-		arr[i] = reference.xform_inv(play_area[i]) * ws;
+		arr[i] = reference.xform_inv(play_area[i]) * (real_t) ws;
 	}
 
 	return arr;
@@ -111,7 +109,10 @@ float OpenVRConfig::get_device_battery_percentage(vr::TrackedDeviceIndex_t p_tra
 	float battery_percentage = ovr->hmd->GetFloatTrackedDeviceProperty(p_tracked_device_index, vr::Prop_DeviceBatteryPercentage_Float, &pError);
 
 	if (pError != vr::TrackedProp_Success) {
-		Utilities::print(String("Could not get battery percentage, OpenVR error: {0}, {1} ").format(Array::make(Variant(pError), String(ovr->hmd->GetPropErrorNameFromEnum(pError)))));
+		Array arr;
+		arr.push_back(Variant(pError));
+		arr.push_back(String(ovr->hmd->GetPropErrorNameFromEnum(pError)));
+		UtilityFunctions::print(String("Could not get battery percentage, OpenVR error: {0}, {1} ").format(arr));
 	}
 
 	return battery_percentage;
@@ -122,7 +123,10 @@ bool OpenVRConfig::is_device_charging(vr::TrackedDeviceIndex_t p_tracked_device_
 	bool is_charging = ovr->hmd->GetBoolTrackedDeviceProperty(p_tracked_device_index, vr::Prop_DeviceIsCharging_Bool, &pError);
 
 	if (pError != vr::TrackedProp_Success) {
-		Utilities::print(String("Could not get charging state, OpenVR error: {0}, {1} ").format(Array::make(Variant(pError), String(ovr->hmd->GetPropErrorNameFromEnum(pError)))));
+		Array arr;
+		arr.push_back(Variant(pError));
+		arr.push_back(String(ovr->hmd->GetPropErrorNameFromEnum(pError)));
+		UtilityFunctions::print(String("Could not get charging state, OpenVR error: {0}, {1} ").format(arr));
 	}
 
 	return is_charging;

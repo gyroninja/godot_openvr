@@ -5,7 +5,7 @@ var export_plugin
 
 func _enter_tree():
 	# Initialization of the plugin goes here
-	export_plugin = preload("res://addons/godot-openvr/OpenVRExportPlugin.gd")
+	# export_plugin = preload("res://addons/godot-openvr/OpenVRExportPlugin.gd")
 
 	if export_plugin:
 		# print("Loaded res://addons/godot-openvr/OpenVRExportPlugin.gd")

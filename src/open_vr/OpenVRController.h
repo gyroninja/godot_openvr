@@ -7,7 +7,7 @@
 #include "openvr_data.h"
 #include <godot_cpp/variant/packed_string_array.hpp>
 #include <godot_cpp/variant/string.hpp>
-#include <godot_cpp/classes/xr_controller3D.hpp>
+#include <godot_cpp/classes/xr_controller3d.hpp>
 
 #include <vector>
 

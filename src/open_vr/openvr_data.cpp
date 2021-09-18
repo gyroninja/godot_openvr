@@ -6,6 +6,7 @@
 #include "godot_cpp/classes/time.hpp"
 #include "godot_cpp/classes/xr_server.hpp"
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <cstring>
 
 using namespace godot;
 

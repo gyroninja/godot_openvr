@@ -14,7 +14,7 @@
 #include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
 #include <godot_cpp/classes/ref.hpp>
-#include <godot_cpp/classes/standard_material3D.hpp>
+#include <godot_cpp/classes/standard_material3d.hpp>
 #include <godot_cpp/classes/xr_positional_tracker.hpp>
 #include <godot_cpp/classes/xr_server.hpp>
 

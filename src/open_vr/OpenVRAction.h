@@ -6,7 +6,7 @@
 
 #include "openvr_data.h"
 #include <godot_cpp/variant/dictionary.hpp>
-#include <godot_cpp/classes/node3D.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/variant/string.hpp>
 
 namespace godot {

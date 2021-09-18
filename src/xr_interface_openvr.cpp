@@ -187,7 +187,7 @@ void XRInterfaceOpenVR::_commit_views(const RID &p_render_target, const Rect2 &p
 			src_rect.set_size(Vector2(width, 1.0));
 		}
 
-		add_blit(p_render_target, src_rect, dst_rect, true, 0, false, Vector2(), 0.0, 0.0, 0.0, 0.0);
+		//add_blit(p_render_target, src_rect, dst_rect, true, 0, false, Vector2(), 0.0, 0.0, 0.0, 0.0);
 	}
 
 	/* TODO make this work
@@ -268,7 +268,7 @@ void XRInterfaceOpenVR::_notification(int64_t what) {
 }
 
 XRInterfaceOpenVR::XRInterfaceOpenVR() {
-	ovr = openvr_data::retain_singleton();
+	//ovr = openvr_data::retain_singleton();
 }
 
 XRInterfaceOpenVR::~XRInterfaceOpenVR() {
